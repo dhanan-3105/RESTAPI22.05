@@ -1,0 +1,6 @@
+docker run -d --name logs10\
+    --log-driver json-file \
+    --log-opt max-size=1k \
+    --log-opt max-file=10 \
+    --log-opt mode=non-blocking \
+    alpine /bin/sh -c "while true; do sleep 2; df -h; done"
