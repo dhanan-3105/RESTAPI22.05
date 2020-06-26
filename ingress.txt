@@ -1,0 +1,105 @@
+emo - Ingress Routing and Ingress Controller
+=============================================
+
+Step 1:
+minikube addons enable ingress
+kubectl get pods -n kube-system
+
+For cloud : helm install my-nginx stable/nginx-ingress
+
+Step 2:
+Now lets create two services
+
+Service 1:
+==========
+kind: Pod
+apiVersion: v1
+metadata:
+  name: apple-app
+  labels:
+    app: apple
+spec:
+  containers:
+    - name: apple-app
+      image: hashicorp/http-echo
+      args:
+        - "-text=apple"
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: apple-service
+spec:
+  selector:
+    app: apple
+  ports:
+    - port: 5678 # Default port for image
+
+kubectl create -f ingpod.txt
+
+Step 3:
+
+Create next service
+orapod.txt
+==========
+kind: Pod
+apiVersion: v1
+metadata:
+  name: oracle-app
+  labels:
+    app: oracle
+spec:
+  containers:
+    - name: oracle-app
+      image: hashicorp/http-echo
+      args:
+        - "-text=oracle"
+
+---
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: oracle-service
+spec:
+  selector:
+    app: oracle
+  ports:
+    - port: 5678 # Default port for image
+
+#kubectl create -f orapod.txt
+
+Step 4:
+=======
+Ingress as Service
+
+ing.txt
+========
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: example-ingress
+  annotations:
+    ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+        - path: /apple
+          backend:
+            serviceName: apple-service
+            servicePort: 5678
+    
+
+# kubectl create -f ing.txt
+
+Step 5:
+minikube ip
+curl -kL http://192.168.99.152/crap
+curl -kL http://192.168.99.152/apple
+curl -kL http://192.168.99.152/oracle
+
+Step 6:
+kubectl get ing
