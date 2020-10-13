@@ -5,4 +5,5 @@ copy Sample.sh /code/Sample.sh
 copy testfile /code/testfile
 run chmod +x /code/Sample.sh
 env version=2
-cmd sh /code/Sample.sh /code/testfile
+entrypoint ["sh","/code/Sample.sh"]
+cmd ["/code/testfile"]
