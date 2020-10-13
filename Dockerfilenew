@@ -1,0 +1,7 @@
+# Dockerfile Simulation of Docker commit process - Slide 25
+FROM ubuntu:18.04
+LABEL MAINTAINER support-ops@oracle.com
+COPY testfile /code/testfile
+RUN apt-get -y update
+RUN apt-get -y install vim
+ENV version=1
