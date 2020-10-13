@@ -1,0 +1,4 @@
+from mysql:5.7
+label maintainer devops-dba@oracle.com
+copy createdb.sql /docker-entrypoint-initdb.d/createdb.sql
+env MYSQL_ROOT_PASSWORD=admin 
