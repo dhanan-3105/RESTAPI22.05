@@ -1,0 +1,37 @@
+Sample.sh
+========
+#!/bin/bash
+if [ $# -gt 0 ]
+then
+if [ -f $1 ]
+then
+  echo "Contents of the file..."
+  cat $1
+else
+  echo "File Not Found.."$1
+fi
+else
+  echo "Not enough command line arguments..."
+fi
+
+
+testfile
+========
+The Sample content of a testfile
+created for testing docker image
+EOF
+
+
+
+Dockerfile
+==========
+
+# Shell Script Implementation for Dockerfile
+from ubuntu
+label maintainer support-apps@oracle.com
+copy Sample.sh /code/Sample.sh
+copy testfile /code/testfile
+run chmod +x /code/Sample.sh
+env version=2
+entrypoint ["sh","/code/Sample.sh"]
+cmd ["/code/testfile"]
