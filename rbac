@@ -1,0 +1,46 @@
+# RBAC Privileges
+namespace: demo-new
+username: demo-user
+privileges: list,watch, delete
+
+
+Step1:
+# kubectl create ns demo-new
+
+Step 2
+# kubectl create sa demo-new-sa -n demo-new
+
+Step 3:
+kubectl get secrets -n demo-new
+#note down the new secret for SA
+
+Step 4:
+kubectl get secret demo-new-sa-token-skgtj -n demo-new -o "jsonpath={.data.token}" > token
+kubectl get secret demo-new-sa-token-skgtj -n demo-new -o "jsonpath={.data.ca\.crt}" > apikey
+# view token, apikey
+
+Step 5:
+kubectl config set-credentials demo-user --client-certificate=apikey --client-key=token --username="demo-user"
+kubectl config view
+
+Step 6:
+kubectl create role pod-reader --verb=get --verb=list --resource=pods -n demo-new
+kubectl describe role pod-reader -n demo-new
+
+Step 7:
+#kubectl create rolebinding demo-role-binding --role=pod-reader --user=demo-user -n demo-new
+#kubectl describe rolebinding demo-role-binding -n demo-new
+#kubectl get rolebinding demo-role-binding -n demo-new -o yaml 
+
+Step 8:
+
+#kubectl auth can-i read pods -n demo
+#kubectl auth can-i read pods -n demo --as demo-user
+#kubectl auth can-i list pods -n demo --as demo-user
+
+#kubectl auth can-i list pods -n demo-new --as demo-user
+#kubectl run test-pod -n demo-new --image=nginx --as demo-user
+#kubectl run test-pod -n demo-new --image=nginx
+
+Step 9:
+kubectl config unset users.demo-user
