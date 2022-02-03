@@ -1,0 +1,13 @@
+version: '3'
+services:
+  databases:
+    image: mysql:5.7
+    environment:
+    - MYSQL_ROOT_PASSWORD=admin
+    - MYSQL_USER=user
+    - MYSQL_PASSWORD=password
+    - MYSQL_DATABASE=demodb
+  web:
+     image: nginx
+     ports:
+     - "2000:80"
